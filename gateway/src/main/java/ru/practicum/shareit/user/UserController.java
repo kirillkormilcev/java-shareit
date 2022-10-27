@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -12,45 +11,42 @@ import ru.practicum.shareit.error.validation.Create;
 import ru.practicum.shareit.error.validation.Update;
 import ru.practicum.shareit.user.dto.UserDto;
 
-import java.util.List;
-
 @Slf4j
 @RestController
 @RequestMapping(path = "/users")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserController {
-    final UserService userService;
+    final UserClient userClient;
 
     @PostMapping
-    public ResponseEntity<UserDto> addUser(@Validated({Create.class}) @RequestBody UserDto userDto) {
+    public ResponseEntity<Object> addUser(@Validated({Create.class}) @RequestBody UserDto userDto) {
         log.info("Обработка эндпойнта POST /users.");
-        return new ResponseEntity<>(userService.addUserToStorage(userDto), HttpStatus.OK);
+        return userClient.addUserToStorage(userDto);
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UserDto> getUser(@PathVariable long userId) {
+    public ResponseEntity<Object> getUser(@PathVariable long userId) {
         log.info("Обработка эндпойнта GET /users/" + userId + ".");
-        return new ResponseEntity<>(userService.getUserById(userId), HttpStatus.OK);
+        return userClient.getUserById(userId);
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDto>> getAllUsers() {
+    public ResponseEntity<Object> getAllUsers() {
         log.info("Обработка эндпойнта GET /users.");
-        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
+        return userClient.getAllUsers();
     }
 
     @PatchMapping("/{userId}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable long userId,
+    public ResponseEntity<Object> updateUser(@PathVariable long userId,
                                               @Validated({Update.class}) @RequestBody UserDto userDto) {
         log.info("Обработка эндпойнта PATCH /users/" + userId + ".");
-        return new ResponseEntity<>(userService.updateUser(userDto, userId), HttpStatus.OK);
+        return userClient.updateUser(userDto, userId);
     }
 
     @DeleteMapping("/{userId}")
-    public HttpStatus deleteUser(@PathVariable long userId) {
+    public ResponseEntity<Object> deleteUser(@PathVariable long userId) {
         log.info("Обработка эндпойнта DELETE /users/" + userId + ".");
-        userService.deleteUserById(userId);
-        return HttpStatus.OK;
+        return userClient.deleteUserById(userId);
     }
 }

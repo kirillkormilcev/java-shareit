@@ -141,7 +141,8 @@ public class ItemService {
     }
 
     private Optional<Booking> findNextBookingOfItem(long itemId, LocalDateTime now) {
-        return bookingRepository.findFirstNextBooking(itemId, now);
+        return bookingRepository.findFirstByItemIdAndStartAfterAndStatus(itemId, now, Sort.by("start").descending(), Status.APPROVED);
+        //return bookingRepository.findFirstNextBooking(itemId, now, new PageRequestModified(0, 1, Sort.by("start").descending()));
     }
 
     private void setRequestToItem(Item item, ItemDtoIn itemDtoIn) {

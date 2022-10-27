@@ -47,12 +47,15 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     Optional<Booking> findFirstByItemIdAndStartBeforeAndStatus(long itemId, LocalDateTime now, Sort sort, Status status);
 
+    Optional<Booking> findFirstByItemIdAndStartAfterAndStatus(long itemId, LocalDateTime now, Sort sort, Status status);
+
+
     @Query("select b from Booking b " +
             "where b.item.id = ?1 " +
             "and b.start > ?2 " +
             "and b.status = 'APPROVED' " +
             "order by b.start desc ")
-    Optional<Booking> findFirstNextBooking(long itemId, LocalDateTime now);
+    Optional<Booking> findFirstNextBooking(long itemId, LocalDateTime now, PageRequest pageRequest);
 
     @Query("select b from Booking b " +
             "where b.item.id = ?2 " +

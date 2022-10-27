@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import ru.practicum.shareit.booking.annotation.IsEndAfterStart;
-import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.error.validation.Create;
 
 import javax.validation.constraints.FutureOrPresent;

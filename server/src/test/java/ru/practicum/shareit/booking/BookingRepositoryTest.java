@@ -4,8 +4,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
+import ru.practicum.shareit.common.PageRequestModified;
 import ru.practicum.shareit.item.ItemRepository;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.UserRepository;
@@ -109,7 +111,8 @@ class BookingRepositoryTest {
 
         assertEquals(booking1.getId(), findCurrentBookingsByOwnerId.get(0).getId());
 
-        final Booking findFirstNextBooking = bookingRepository.findFirstNextBooking(item2.getId(), LocalDateTime.now())
+        final Booking findFirstNextBooking = bookingRepository.findFirstNextBooking(item2.getId(), LocalDateTime.now(),
+                        new PageRequestModified(0, 1, Sort.by("start").descending()))
                 .orElseThrow();
 
         assertEquals(booking2.getId(), findFirstNextBooking.getId());
